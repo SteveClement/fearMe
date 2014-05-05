@@ -4,6 +4,8 @@ from subprocess import *
 
 from plistlib import *
 
+import os
+
 fhCH = open('connectionHistory.txt','a')
 
 output=check_output("/home/pi/Desktop/code/fearMe/grabDev.sh", shell=True)
@@ -20,12 +22,33 @@ if attached_iDevices:
 		iDev_1 = attached_iDevices[0][2:]
 		iDev_2 = attached_iDevices[1]
 
-		iDev1XML = Popen(["/home/pi/Desktop/code/fearMe/grabDev.sh", iDev_1], shell=False)
+                if ( os.path.isfile('xml/' + iDev_1 + '.xml') ):
+			print("We have this device already")
+		else:
+			iDev1XML = Popen(["/home/pi/Desktop/code/fearMe/grabDev.sh", iDev_1], shell=False)
 
-		iDev2XML = Popen(["/home/pi/Desktop/code/fearMe/grabDev.sh", iDev_2], shell=False)
+                if ( os.path.isfile('xml/' + iDev_2 + '.xml') ):
+			print("We have this device already")
+		else:
+			iDev2XML = Popen(["/home/pi/Desktop/code/fearMe/grabDev.sh", iDev_2], shell=False)
 
-		print(iDev_1)
-		print(iDev_2)
+		readDev(iDev_1)
+		readDev(iDev_2)
+
+		print('First device specs:' + iDev_1_plist['DeviceName'] + iDev_1_plist['ProductVersion'] + iDev_1_plist['DeviceColor'] + iDev_1_plist['HardwareModel'])
+		print('Second device specs:' + iDev_2_plist['DeviceName'] + iDev_2_plist['ProductVersion'] + iDev_2_plist['DeviceColor'] + iDev_2_plist['HardwareModel'])
+
 	else:
 		iDev = attached_iDevices[0][2:]
-		iDevXML = Popen(["/home/pi/Desktop/code/fearMe/grabDev.sh", iDev], shell=False)
+
+		if ( os.path.isfile('xml/' + iDev + '.xml') ):
+			print("We have this device already")
+			readDev(iDev)
+		else:
+			iDevXML = Popen(["/home/pi/Desktop/code/fearMe/grabDev.sh", iDev], shell=False)
+
+def readDev(iDev):
+	iDev_plist = readPlist('xml/' + iDev + '.xml')
+	print('Device specs:' + iDev_plist['DeviceName'] + iDev_plist['ProductVersion'] + iDev_plist['DeviceColor'] + iDev_plist['HardwareModel'])
+
+if __name__ == "__main__": main()
