@@ -61,11 +61,23 @@ def readDev(iDev):
 	if iDev_plist['DeviceColor'] == '#3b3b3c':
 		iDev_plist['DeviceColor'] = 'grey'
 	print('Device specs: {} {} {} {}'.format(iDev_plist['DeviceName'] , iDev_plist['ProductVersion'] , iDev_plist['DeviceColor'] , iDev_plist['HardwareModel']))
+	checkVersion(iDev_plist['ProductVersion'])
 
 def setup():
 	if not os.path.exists('xml'):
 		os.makedirs('xml')
 	if not os.path.exists('txt'):
 		os.makedirs('txt')
+
+def checkVersion(iOSVer):
+	#v7 = "7.0.6"
+	v7 = "7.0.4"
+	v71 = "7.1.1"
+	v6 = "6.0.2"
+	v61 = "6.1.6"
+	v5 = "obsolete"
+
+	if iOSVer == v7:
+		print("You are runing: " + v7)
 
 if __name__ == "__main__": main()
