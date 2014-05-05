@@ -21,8 +21,10 @@ def main():
 
 	try:
 		attached_iDevices = str(check_output(["/usr/bin/idevice_id", "-l"])).rstrip().split('\\n')
+		iDev = True
 		print("Grabbing attached iDevices")
 	except:
+		iDev = False
 		print("No iDevice connected, move along")
 
 	if output:
@@ -32,7 +34,7 @@ def main():
 		print(attachedDevices[1].split(":")[0] + ":" + attachedDevices[1].split(":")[1])
 		fhCH.close()
 
-	if attached_iDevices:
+	if iDev:
 		if ( len(attached_iDevices) > 2 ):
 			print("More than 1 iDevice detected")
 			iDev_1 = attached_iDevices[0][2:]
