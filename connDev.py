@@ -3,12 +3,21 @@
 from subprocess import *
 from plistlib import *
 from time import *
+from os.path import expanduser
 import os
 
-def main():
-	fhCH = open('connectionHistory.txt','a')
 
-	output=check_output("/home/pi/Desktop/code/fearMe/grabDev.sh", shell=True)
+
+def main():
+
+	setup()
+	home = expanduser("~")
+	code = "/Desktop/code/fearMe"
+	grabDev = home + code + "/grabDev.sh"
+
+	fhCH = open('txt/connectionHistory.txt','a')
+
+	output=check_output(grabDev, shell=True)
 
 	attached_iDevices = str(check_output(["/usr/bin/idevice_id", "-l"])).rstrip().split('\\n')
 
@@ -26,14 +35,14 @@ def main():
 				print("We have this device already")
 				readDev(iDev_1)
 			else:
-				iDev1XML = Popen(["/home/pi/Desktop/code/fearMe/grabDev.sh", iDev_1], shell=False)
+				iDev1XML = Popen([grabDev, iDev_1], shell=False)
 				readDev(iDev_1)
 
 			if ( os.path.isfile('xml/' + iDev_2 + '.xml') ):
 				print("We have this device already")
 				readDev(iDev_2)
 			else:
-				iDev2XML = Popen(["/home/pi/Desktop/code/fearMe/grabDev.sh", iDev_2], shell=False)
+				iDev2XML = Popen([grabDev, iDev_2], shell=False)
 				readDev(iDev_2)
 
 		else:
@@ -43,7 +52,7 @@ def main():
 				print("We have this device already")
 				readDev(iDev)
 			else:
-				iDevXML = Popen(["/home/pi/Desktop/code/fearMe/grabDev.sh", iDev], shell=False)
+				iDevXML = Popen([grabDev, iDev], shell=False)
 				readDev(iDev)
 
 def readDev(iDev):
@@ -52,5 +61,11 @@ def readDev(iDev):
 	if iDev_plist['DeviceColor'] == '#3b3b3c':
 		iDev_plist['DeviceColor'] = 'grey'
 	print('Device specs: {} {} {} {}'.format(iDev_plist['DeviceName'] , iDev_plist['ProductVersion'] , iDev_plist['DeviceColor'] , iDev_plist['HardwareModel']))
+
+def setup():
+	if not os.path.exists('xml'):
+		os.makedirs('xml')
+	if not os.path.exists('txt'):
+		os.makedirs('txt')
 
 if __name__ == "__main__": main()
