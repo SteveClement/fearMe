@@ -19,10 +19,17 @@ def main():
 
 	output=check_output(grabDev, shell=True)
 
-	attached_iDevices = str(check_output(["/usr/bin/idevice_id", "-l"])).rstrip().split('\\n')
+	try:
+		attached_iDevices = str(check_output(["/usr/bin/idevice_id", "-l"])).rstrip().split('\\n')
+		print("Grabbing attached iDevices")
+	except:
+		print("No iDevice connected, move along")
 
 	if output:
 		print(output, file=fhCH)
+		attachedDevices=str(output).rstrip().split('\\n')
+		print(attachedDevices[0][2:].split(":")[0] + ":" + attachedDevices[0][2:].split(":")[1])
+		print(attachedDevices[1].split(":")[0] + ":" + attachedDevices[1].split(":")[1])
 		fhCH.close()
 
 	if attached_iDevices:
