@@ -7,6 +7,9 @@ from Adafruit_CharLCDPlate import Adafruit_CharLCDPlate
 # pass '0' for early 256 MB Model B boards or '1' for all later versions
 lcd = Adafruit_CharLCDPlate()
 
+#lcd.begin(16, 4)
+lcd.begin(16, 2)
+
 # Clear display and show greeting, pause 1 sec
 lcd.clear()
 lcd.message("Adafruit RGB LCD\nPlate w/Keypad!")
@@ -20,7 +23,11 @@ for c in col:
     sleep(.5)
 
 # Poll buttons, display message & set backlight accordingly
-btn = ((lcd.LEFT  , 'Red Red Wine'              , lcd.RED),
+# 16x2 wrap:
+#btn = ((lcd.LEFT  , 'This is a very l\ong line to see where th\is code will wrape the line :)'              , lcd.RED),
+# 16x4 wrap:
+#btn = ((lcd.LEFT  , 'This is a very long \line to see where th\is code will wrape t\he line :)'              , lcd.RED),
+btn = ((lcd.LEFT  , 'This is a very long line to see where this code will wrape the line :)'              , lcd.RED),
        (lcd.UP    , 'Sita sings\nthe blues'     , lcd.BLUE),
        (lcd.DOWN  , 'I see fields\nof green'    , lcd.GREEN),
        (lcd.RIGHT , 'Purple mountain\nmajesties', lcd.VIOLET),

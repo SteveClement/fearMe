@@ -260,6 +260,7 @@ class Adafruit_CharLCDPlate(Adafruit_I2C):
     def begin(self, cols, lines):
         self.currline = 0
         self.numlines = lines
+        self.numcols = cols
         self.clear()
 
 
@@ -404,21 +405,35 @@ class Adafruit_CharLCDPlate(Adafruit_I2C):
         self.write(self.LCD_SETDDRAMADDR)
 
 
-    def message(self, text):
-        """ Send string to LCD. Newline wraps to second line"""
-        lines = str(text).split('\n')    # Split at newline(s)
-
-    def message(self, text):
-        """ Send string to LCD. Newline wraps to second line"""
-        lines = str(text).split('\n')    # Split at newline(s)
-        for i, line in enumerate(lines): # For each substring...
-            if i == 1:                    # If newline(s),
-                self.write(0xC0)         #  set DDRAM address to 2nd line
-            elif i == 2:                    # If newline(s),
-                self.write(0x94)         #  set DDRAM address to 2nd line
-            elif i >= 3:                    # If newline(s),
-                self.write(0xD4)         #  set DDRAM address to 2nd line
-            self.write(line, True)       # Issue substring
+    def message(self, text, limitMode = 0):
+        """ Send string to LCD. Newline wraps to next line"""
+        lines = str(text).split('\n')       # Split at newline(s)
+        for i, line in enumerate(lines):    # For each substring...
+            if i == 1:                      # If newline(s),
+                self.write(0xC0)             # set DDRAM address to 2nd line
+            elif i == 2:
+                self.write(0x94)
+            elif i >= 3:
+                self.write(0xD4)
+            """Now depending on the limit mode set by the function call this will handle """
+            lineLength = len(line)
+            limit = self.numcols
+            if limitMode <= 0: 
+                self.write(line, True)     
+            elif lineLength >= limit and limitMode == 1:
+                '''With the limit mode set to 1 the line is truncated 
+                at the number of columns available on the display'''
+                limitedLine = line[0:self.numcols]
+                self.write(limitedLine, True)  
+            elif lineLength >= limit and limitMode == 2:
+                '''With the limit mode set to 2 the line is truncated 
+                at the number of columns minus 3 to add in an elipse'''
+                limitedLine = line[0:self.numcols-3]+'...'
+                self.write(limitedLine, True)
+            elif lineLength >= limit and limitMode >= 3:
+                '''Future todo, add in proper, "line after line" cariage return'''
+            else:
+                self.write(line, True)
 
     def backlight(self, color):
         c          = ~color
@@ -447,7 +462,7 @@ class Adafruit_CharLCDPlate(Adafruit_I2C):
 if __name__ == '__main__':
 
     lcd = Adafruit_CharLCDPlate()
-    lcd.begin(16, 2)
+    lcd.begin(16, 4)
     lcd.clear()
     lcd.message("Adafruit RGB LCD\nPlate w/Key\npa\nd!")
     sleep(1)
