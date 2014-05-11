@@ -1,4 +1,4 @@
-#!/usr/bin/env python
+#!/usr/bin/env python3
  
 from Adafruit_CharLCDPlate import Adafruit_CharLCDPlate
 from subprocess import *

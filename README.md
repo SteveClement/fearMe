@@ -12,6 +12,22 @@ Dependencies to be installed on Raspbian:
 
  sudo apt-get install python-serial python-smbus i2c-tools festival pyttsx espeak xsel festlex-cmu arduino gcc-avr avr-libc avrdude
 
+python3-smbus
+-------------
+
+mkdir -p ~/Desktop/code/fearMe/Downloads
+cd ~/Desktop/code/fearMe/Downloads
+wget http://ftp.de.debian.org/debian/pool/main/i/i2c-tools/i2c-tools_3.1.0.orig.tar.bz2
+tar xf i2c-tools_3.1.0.orig.tar.bz2
+cd i2c-tools-3.1.0/py-smbus
+cp smbusmodule.c smbusmodule.c.orig
+cat ~/Desktop/code/fearMe/Patches/smbusmodule.c.diff | patch
+wget http://dl.lm-sensors.org/lm-sensors/releases/lm_sensors-2.10.8.tar.gz
+tar xfz lm_sensors-2.10.8.tar.gz
+cp lm_sensors-2.10.8/kernel/include/i2c-dev.h .
+rm -r lm_sensors-2.10.8*
+python3 setup.py build
+sudo python3 setup.py install
 
 
 Arduino
@@ -61,6 +77,11 @@ i2c-dev
 
 To:
 /etc/modules
+
+Add your user to the group: i2c
+
+vigr
+vigr -s
 
 High quality voices
 -------------------
