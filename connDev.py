@@ -22,7 +22,9 @@ cmd = "ip addr show eth0 | grep inet | awk '{print $2}' | cut -d/ -f1"
 safetyMessage="Your device is very safe now."
 welcomeMessage="Starting up"
 goodHandsMessage="Your data is\nin good hands."
-inciteMessage="Please connect your phone"
+inciteMessage="Please connect your device"
+
+runOnce = True
 
 debug = {'glob': False, 'lcd': False }
 feature = {'lcd': True, 'audio': True, 'arduino': True, 'creep': True}
@@ -51,11 +53,13 @@ def main():
 	global startTime
 	global lastTimeout
 
+	iDevDupeCount = 0
+
 	ipaddr = setup()
 	if debug['lcd']:
 		lcd.message('IP %s' % ( str(ipaddr) ) )
 	lcd.clear()
-	lcd.message('Please connect\nyour phone...')
+	lcd.message('Please connect\nyour device...')
 	home = expanduser("~")
 	code = "/Desktop/code/fearMe"
 	grabDev = home + code + "/Scripts/grabDev.sh"
@@ -63,8 +67,8 @@ def main():
 	fhCH = open('txt/connectionHistory.txt','a')
 
 	output=check_output(grabDev, shell=True)
-	if ((lastOutput - startTime) > 30) or ((int(time() - lastTimeout) > 30)):
-		print("timeout")
+	if ((lastOutput - startTime) > 30) or ((int(time() - lastTimeout) > 180)):
+		print("#timeout")
 		timeout()
 		lastTimeout=int(time())
 	print(output)
@@ -90,10 +94,12 @@ def main():
 		attachedDevice = attachedDevices[0][2:].split(":")[1].replace("iPad", "eye Pad")
 		print(attachedDevice)
 		lcd.backlight(lcd.RED)
-		msg = "You connected your " + attachedDevice
+		msg = "Hello:\n " + attachedDevice
 		lcd.clear()
-		lcd.message(msg.replace("your ","your\n"))
-		sayStuff(msg)
+		lcd.message(msg)
+		msg2 = "Hello " + attachedDevice
+		sayStuff(msg2)
+		#sayStuff(goodHandsMessage)
 		print(attachedDevices[1].split(":")[0] + ":" + attachedDevices[1].split(":")[1])
 		fhCH.close()
 
@@ -105,7 +111,11 @@ def main():
 
 			if ( os.path.isfile('xml/' + iDev_1 + '.xml') ):
 				print("We have this device already")
-				iDevDupe = True
+				if iDevDupeCount < 3:
+					iDevDupeCount += 1
+					iDevDupe = True
+				else:
+					iDevDupe = False
 				readDev(iDev_1, iDevDupe)
 			else:
 				iDev1XML = Popen([grabDev, iDev_1], shell=False)
@@ -114,7 +124,11 @@ def main():
 
 			if ( os.path.isfile('xml/' + iDev_2 + '.xml') ):
 				print("We have this device already")
-				iDevDupe = True
+				if iDevDupeCount < 3:
+					iDevDupeCount += 1
+					iDevDupe = True
+				else:
+					iDevDupe = False
 				readDev(iDev_2, iDevDupe)
 			else:
 				iDev2XML = Popen([grabDev, iDev_2], shell=False)
@@ -159,44 +173,47 @@ def readDev(iDev, iDevDupe=False):
 	except:
 		iDevPad = False
 
-	print('Device specs: {} {} {} {}'.format(iDev_plist['DeviceName'] , iDev_plist['ProductVersion'] , iDev_plist['DeviceColor'] , iDev_plist['HardwareModel']))
+	##print('Device specs: {} {} {} {}'.format(iDev_plist['DeviceName'] , iDev_plist['ProductVersion'] , iDev_plist['DeviceColor'] , iDev_plist['HardwareModel']))
+	#UnicodeEncodeError: 'ascii' codec can't encode character '\u2019' in position 27: ordinal not in range(128)
 	if not iDevDupe:
 		if iDevPad:
-			sayStuff("Wow, you own an eye Device, you are probably from Luxembourg, taking extra good care of your data.")
-			sayStuff("Your eye Pad is called " + iDevName + ". It is running version " + iDevVersion + " and the color is " + iDevColor)
+			#sayStuff("You own an eye Device, you are probably from Luxembourg, taking extra good care of your data.")
+			sayStuff("Hello " + iDevName + ". Your device is running version " + iDevVersion + " and the color you choose " + iDevColor)
 		else:
-			sayStuff("Wow, you own an eye Device, you are probably from Luxembourg, taking extra good care of your data.")
-			sayStuff("Your eye Phone is called " + iDevName + ". It is running version " + iDevVersion + " and the color is " + iDevColor)
+			sayStuff("Hello " + iDevName + ". Your device is running version " + iDevVersion + " and the color you choose " + iDevColor)
 
 		sayStuff(safetyMessage)
 	checkVersion(iDev_plist['ProductVersion'])
 
 def setup():
-	sayStuff("Welcome to the Universal charging station.")
-	lcd.message(welcomeMessage)
-	sleep(1)
-	lcd.clear()
-	for _ in range(10):
-		lcd.message(next(spinner))
-		sleep(.3)
-		lcd.clear()
+	global runOnce
 	ipaddr = run_cmd(cmd)
-	if not os.path.exists('xml'):
-		os.makedirs('xml')
-	if not os.path.exists('txt'):
-		os.makedirs('txt')
+	if runOnce:
+		#sayStuff("Welcome to the Universal charging station.")
+		lcd.message(welcomeMessage)
+		sleep(1)
+		lcd.clear()
+		for _ in range(10):
+			lcd.message(next(spinner))
+			sleep(.3)
+			lcd.clear()
+		if not os.path.exists('xml'):
+			os.makedirs('xml')
+		if not os.path.exists('txt'):
+			os.makedirs('txt')
+		runOnce=False
 	return ipaddr
 
 def timeout():
 	lcd.clear()
 	lcd.message("Timeout reached")
-	for _ in range(0,5):
+	for _ in range(0,2):
 		lcd.backlight(lcd.RED)
-		sleep(.3)
+		sleep(.5)
 		lcd.backlight(lcd.WHITE)
-		sleep(.3)
+		sleep(.5)
 		lcd.backlight(lcd.BLUE)
-		sleep(.3)
+		sleep(.5)
 
 def checkVersion(iOSVer):
 	#v7 = "7.0.6"
@@ -213,7 +230,7 @@ if __name__ == "__main__":
 	while True:
 		main()
 		print("Sleeping")
-		sleep(3)
+		sleep(.5)
 		lcd.clear()
 		lcd.backlight(lcd.GREEN)
-		lcd.message(datetime.now().strftime('%b %d\n  %H:%M:%S\n'))
+		#lcd.message(datetime.now().strftime('%b %d\n  %H:%M:%S\n'))
