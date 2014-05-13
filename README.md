@@ -191,6 +191,8 @@ crontab
 -------
 
 
-Add: @reboot ~/Desktop/code/fearMe/Scripts/fearMe_tmux.sh
+Add:
+@reboot ~/Desktop/code/fearMe/Scripts/fearMe_tmux.sh
+5/* * * * * ~/Desktop/code/fearMe/Scripts/cleanUp.sh
 
 to your $LUSER crontab
