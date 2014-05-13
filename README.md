@@ -186,3 +186,11 @@ festival> (voice_us2_mbrola)
 festival> (SayText "Hello from Ubuntu")
 festival> (tts "story.txt" nil)
 festival> (intro)
+
+crontab
+-------
+
+
+Add: @reboot ~/Desktop/code/fearMe/Scripts/fearMe_tmux.sh
+
+to your $LUSER crontab
