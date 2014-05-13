@@ -10,7 +10,7 @@ REPO_DIR=/home/Desktop/code/fearMe
 
 Dependencies to be installed on Raspbian:
 
- sudo apt-get install python-serial python-smbus i2c-tools festival pyttsx espeak xsel festlex-cmu arduino gcc-avr avr-libc avrdude
+ sudo apt-get install python3-serial python3-dev python3-rpi.gpio i2c-tools festival pyttsx espeak xsel festlex-cmu arduino gcc-avr avr-libc avrdude
 
 python3-smbus
 -------------
