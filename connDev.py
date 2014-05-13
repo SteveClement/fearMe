@@ -9,18 +9,26 @@ from os.path import expanduser
 from datetime import datetime
 import os
 from datetime import datetime
+import spinner
+
+spinner = spinner.spinning_cursor()
 
 lcd = Adafruit_CharLCDPlate()
 lcd.begin(16,2)
+lcd.backlight(lcd.GREEN)
+lcd.blink()
 
 cmd = "ip addr show eth0 | grep inet | awk '{print $2}' | cut -d/ -f1"
 safetyMessage="Your device is very safe now."
-welcomeMessage="Welcome to the universal charging station. Your data is in good hands."
+welcomeMessage="Starting up"
+goodHandsMessage="Your data is\nin good hands."
 inciteMessage="Please connect your phone"
 
 debug = {'glob': False, 'lcd': False }
+feature = {'lcd': True, 'audio': True, 'arduino': True, 'creep': True}
 
 lcd_debug = False
+startTime=lastOutput=lastTimeout=int(time())
 
 def run_cmd(cmd):
         p = Popen(cmd, shell=True, stdout=PIPE)
@@ -35,21 +43,30 @@ def sayStuff(msg):
 	print(msg, file=fh)
 	fh.close()
 
+	print("Saying: " + msg)
 	check_output([festival, festival_opts, festival_file])
 
 def main():
+	global lastOutput
+	global startTime
+	global lastTimeout
+
 	ipaddr = setup()
-	#sayStuff("Welcome to FEAR ME")
-	#lcd.message('IP %s' % ( str(ipaddr) ) )
+	if debug['lcd']:
+		lcd.message('IP %s' % ( str(ipaddr) ) )
 	lcd.clear()
-	lcd.message('Analyzing phone...')
+	lcd.message('Please connect\nyour phone...')
 	home = expanduser("~")
 	code = "/Desktop/code/fearMe"
-	grabDev = home + code + "/grabDev.sh"
+	grabDev = home + code + "/Scripts/grabDev.sh"
 
 	fhCH = open('txt/connectionHistory.txt','a')
 
 	output=check_output(grabDev, shell=True)
+	if ((lastOutput - startTime) > 30) or ((int(time() - lastTimeout) > 30)):
+		print("timeout")
+		timeout()
+		lastTimeout=int(time())
 	print(output)
 
 	try:
@@ -65,12 +82,14 @@ def main():
 			lcd.message("No iDevice connected, move along")
 
 	if output:
+		lastOutput=int(time())
 		print(output, file=fhCH)
 		attachedDevices=str(output).rstrip().split('\\n')
 		print(attachedDevices[0][2:].split(":")[0] + ":" + attachedDevices[0][2:].split(":")[1])
 		attachedDevice = attachedDevices[0][2:].split(":")[1].replace("iPhone", "eye Phone")
 		attachedDevice = attachedDevices[0][2:].split(":")[1].replace("iPad", "eye Pad")
 		print(attachedDevice)
+		lcd.backlight(lcd.RED)
 		msg = "You connected your " + attachedDevice
 		lcd.clear()
 		lcd.message(msg.replace("your ","your\n"))
@@ -113,8 +132,8 @@ def main():
 				iDevXML = Popen([grabDev, iDev], shell=False)
 				iDevDupe = False
 				readDev(iDev, iDevDupe)
-	else:
-		sayStuff(safetyMessage)
+#	else:
+#		sayStuff(safetyMessage)
 
 def readDev(iDev, iDevDupe=False):
 	# Sleep to allow write to disk! (which is weird because the shell script is done and no file on disk)
@@ -143,23 +162,41 @@ def readDev(iDev, iDevDupe=False):
 	print('Device specs: {} {} {} {}'.format(iDev_plist['DeviceName'] , iDev_plist['ProductVersion'] , iDev_plist['DeviceColor'] , iDev_plist['HardwareModel']))
 	if not iDevDupe:
 		if iDevPad:
-			sayStuff("Wow, you own an eye Device, you are probably loaded, taking extra good care of your data.")
+			sayStuff("Wow, you own an eye Device, you are probably from Luxembourg, taking extra good care of your data.")
 			sayStuff("Your eye Pad is called " + iDevName + ". It is running version " + iDevVersion + " and the color is " + iDevColor)
 		else:
-			sayStuff("Wow, you own an eye Device, you are probably loaded, taking extra good care of your data.")
+			sayStuff("Wow, you own an eye Device, you are probably from Luxembourg, taking extra good care of your data.")
 			sayStuff("Your eye Phone is called " + iDevName + ". It is running version " + iDevVersion + " and the color is " + iDevColor)
 
 		sayStuff(safetyMessage)
 	checkVersion(iDev_plist['ProductVersion'])
 
 def setup():
+	sayStuff("Welcome to the Universal charging station.")
+	lcd.message(welcomeMessage)
+	sleep(1)
+	lcd.clear()
+	for _ in range(10):
+		lcd.message(next(spinner))
+		sleep(.3)
+		lcd.clear()
 	ipaddr = run_cmd(cmd)
 	if not os.path.exists('xml'):
 		os.makedirs('xml')
 	if not os.path.exists('txt'):
 		os.makedirs('txt')
 	return ipaddr
-	lcd.message(welcomeMessage)
+
+def timeout():
+	lcd.clear()
+	lcd.message("Timeout reached")
+	for _ in range(0,5):
+		lcd.backlight(lcd.RED)
+		sleep(.3)
+		lcd.backlight(lcd.WHITE)
+		sleep(.3)
+		lcd.backlight(lcd.BLUE)
+		sleep(.3)
 
 def checkVersion(iOSVer):
 	#v7 = "7.0.6"
@@ -175,5 +212,8 @@ def checkVersion(iOSVer):
 if __name__ == "__main__":
 	while True:
 		main()
-		sleep(10)
+		print("Sleeping")
+		sleep(3)
+		lcd.clear()
+		lcd.backlight(lcd.GREEN)
 		lcd.message(datetime.now().strftime('%b %d\n  %H:%M:%S\n'))

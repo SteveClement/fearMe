@@ -12,11 +12,17 @@ lcd.begin(16, 2)
 
 # Clear display and show greeting, pause 1 sec
 lcd.clear()
+lcd.backlight(lcd.GREEN)
 lcd.blink()
-for a in range(0,100):
-    lcd.message("Steve Clements iCrap",0)
-    sleep(1)
-    lcd.scrollDisplayLeft()
+
+msg = "Welcome to uni  charge"
+
+for a in range(0,len(msg)):
+    if a == 16:
+        lcd.message("\n")
+    lcd.message(msg[a],0)
+    sleep(.2)
+    #lcd.scrollDisplayLeft()
 #sleep(1)
 
 # Cycle through backlight colors
@@ -24,7 +30,7 @@ col = (lcd.RED , lcd.YELLOW, lcd.GREEN, lcd.TEAL,
        lcd.BLUE, lcd.VIOLET, lcd.ON   , lcd.OFF)
 for c in col:
     lcd.backlight(c)
-    sleep(.5)
+    sleep(.3)
 
 # Poll buttons, display message & set backlight accordingly
 # 16x2 wrap:
@@ -38,7 +44,7 @@ btn = ((lcd.LEFT  , 'This is a very long line to see where this code will wrape 
        (lcd.SELECT, 'GoodBye'                          , lcd.VIOLET))
 prev = -1
 lcd.clear()
-lcd.message("Now ready for input",1)
+lcd.message("Now ready!\nPlug in your test device",1)
 while True:
     for b in btn:
         if lcd.buttonPressed(b[0]):
