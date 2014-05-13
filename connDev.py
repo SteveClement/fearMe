@@ -8,12 +8,15 @@ from time import *
 from os.path import expanduser
 from datetime import datetime
 import os
+from datetime import datetime
 
 lcd = Adafruit_CharLCDPlate()
 lcd.begin(16,2)
 
 cmd = "ip addr show eth0 | grep inet | awk '{print $2}' | cut -d/ -f1"
 safetyMessage="Your device is very safe now."
+welcomeMessage="Welcome to the universal charging station. Your data is in good hands."
+inciteMessage="Please connect your phone"
 
 debug = {'glob': False, 'lcd': False }
 
@@ -68,7 +71,10 @@ def main():
 		attachedDevice = attachedDevices[0][2:].split(":")[1].replace("iPhone", "eye Phone")
 		attachedDevice = attachedDevices[0][2:].split(":")[1].replace("iPad", "eye Pad")
 		print(attachedDevice)
-		sayStuff("You connected your " + attachedDevice)
+		msg = "You connected your " + attachedDevice
+		lcd.clear()
+		lcd.message(msg.replace("your ","your\n"))
+		sayStuff(msg)
 		print(attachedDevices[1].split(":")[0] + ":" + attachedDevices[1].split(":")[1])
 		fhCH.close()
 
@@ -119,7 +125,7 @@ def readDev(iDev, iDevDupe=False):
 		except:
 			continue
 
-	if iDev_plist['DeviceColor'] == '#3b3b3c':
+	if (iDev_plist['DeviceColor'] == '#3b3b3c' or iDev_plist['DeviceColor'] == '#e1e4e3'):
 		iDev_plist['DeviceColor'] = 'grey'
 	iDevName = iDev_plist['DeviceName'].replace("'", "")
 	iDevName = iDev_plist['DeviceName'].replace("’", "")
@@ -153,6 +159,7 @@ def setup():
 	if not os.path.exists('txt'):
 		os.makedirs('txt')
 	return ipaddr
+	lcd.message(welcomeMessage)
 
 def checkVersion(iOSVer):
 	#v7 = "7.0.6"
@@ -168,3 +175,5 @@ def checkVersion(iOSVer):
 if __name__ == "__main__":
 	while True:
 		main()
+		sleep(10)
+		lcd.message(datetime.now().strftime('%b %d\n  %H:%M:%S\n'))

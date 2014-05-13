@@ -1,4 +1,4 @@
-#!/usr/bin/python
+#!/usr/bin/env python3
 
 # Python library for Adafruit RGB-backlit LCD plate for Raspberry Pi.
 # Written by Adafruit Industries.  MIT license.
