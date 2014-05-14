@@ -10,19 +10,45 @@ REPO_DIR=/home/Desktop/code/fearMe
 
 Dependencies to be installed on Raspbian:
 
- sudo apt-get install python3-serial python3-dev python3-rpi.gpio i2c-tools festival pyttsx espeak xsel festlex-cmu arduino gcc-avr avr-libc avrdude
+ sudo apt-get install python-serial python3-serial python3-dev python3-rpi.gpio i2c-tools festival espeak xsel festlex-cmu arduino gcc-avr avr-libc avrdude libimobiledevice-utils vim tmux htop festvox-don festvox-rablpc16k festvox-kallpc16k festvox-kdlpc16k
+
+Disable screen sleep
+--------------------
+
+If X is running:
+
+sudo vi /etc/lightdm/lightdm.conf
+xserver-command=X -s 0 dpms
+
+If only on console:
+
+sudo vi /etc/kbd/config
+BLANK_TIME=0
+POWERDOWN_TIME=0
+
+
+raspian-config
+--------------
+
+Add:
+
+LC_ALL=en_GB.UTF-8
+LANGUAGE=en_GB.UTF-8
+
+To:
+/etc/default/locale
 
 python3-smbus
 -------------
 
 mkdir -p ~/Desktop/code/fearMe/Downloads
 cd ~/Desktop/code/fearMe/Downloads
-wget http://ftp.de.debian.org/debian/pool/main/i/i2c-tools/i2c-tools_3.1.0.orig.tar.bz2
+wget -c http://ftp.de.debian.org/debian/pool/main/i/i2c-tools/i2c-tools_3.1.0.orig.tar.bz2
 tar xf i2c-tools_3.1.0.orig.tar.bz2
 cd i2c-tools-3.1.0/py-smbus
 cp smbusmodule.c smbusmodule.c.orig
 cat ~/Desktop/code/fearMe/Patches/smbusmodule.c.diff | patch
-wget http://dl.lm-sensors.org/lm-sensors/releases/lm_sensors-2.10.8.tar.gz
+wget -c http://dl.lm-sensors.org/lm-sensors/releases/lm_sensors-2.10.8.tar.gz
 tar xfz lm_sensors-2.10.8.tar.gz
 cp lm_sensors-2.10.8/kernel/include/i2c-dev.h .
 rm -r lm_sensors-2.10.8*
@@ -35,6 +61,7 @@ Arduino
 
 Fetch the NeoPixel library:
 
+mkdir -p ~/sketchbook/libraries
 cd ~/sketchbook/libraries
 git clone git@github.com:SteveClement/Adafruit_NeoPixel.git
 
@@ -47,7 +74,7 @@ Upgrade to Arduino 1.0.5 to use the Arduino micro board:
 
 mkdir ~/Desktop/code/fearMe/Arduino/Downloads
 cd ~/Desktop/code/fearMe/Arduino/Downloads
-wget http://arduino.googlecode.com/files/arduino-1.0.5-linux32.tgz
+wget -c http://arduino.googlecode.com/files/arduino-1.0.5-linux32.tgz
 tar zxvf arduino-1.0.5-linux32.tgz
 cd arduino-1.0.5
 rm -rf hardware/tools
@@ -66,6 +93,7 @@ put this to your .bashrc
 export ARDUINO_DIR=/home/pi/Desktop/code/fearMe/Arduino/Downloads/arduino-1.0.5
 export ARDMK_DIR=/home/pi/Desktop/code/Arduino-Makefile
 export AVR_TOOLS_DIR=/usr
+export EDITOR=vim
 
 LCD Display
 -----------
@@ -80,8 +108,8 @@ To:
 
 Add your user to the group: i2c
 
-vigr
-vigr -s
+sudo vigr
+sudo vigr -s
 
 High quality voices
 -------------------
@@ -196,3 +224,7 @@ Add:
 5/* * * * * ~/Desktop/code/fearMe/Scripts/cleanUp.sh
 
 to your $LUSER crontab
+
+
+Finally, you can ask the plate which buttons are pressed with buttonPressed(lcd.BUTTONNAME) where BUTTONNAME is LEFT RIGHT UP DOWN or SELECT. This is not an interrupt-driven library so you can't have an interrupt go off when a button in pressed, instead you'll have to query the button in a loop. 
+
