@@ -32,7 +32,6 @@ raspian-config
 
 Add:
 
-LANG=en_GB.UTF-8
 LC_ALL=en_GB.UTF-8
 LANGUAGE=en_GB.UTF-8
 
