@@ -10,7 +10,22 @@ REPO_DIR=/home/Desktop/code/fearMe
 
 Dependencies to be installed on Raspbian:
 
- sudo apt-get install python-serial python3-serial python3-dev python3-rpi.gpio i2c-tools festival espeak xsel festlex-cmu arduino gcc-avr avr-libc avrdude libimobiledevice-utils vim tmux htop
+ sudo apt-get install python-serial python3-serial python3-dev python3-rpi.gpio i2c-tools festival espeak xsel festlex-cmu arduino gcc-avr avr-libc avrdude libimobiledevice-utils vim tmux htop festvox-don festvox-rablpc16k festvox-kallpc16k festvox-kdlpc16k
+
+Disable screen sleep
+--------------------
+
+If X is running:
+
+sudo vi /etc/lightdm/lightdm.conf
+xserver-command=X -s 0 dpms
+
+If only on console:
+
+sudo vi /etc/kbd/config
+BLANK_TIME=0
+POWERDOWN_TIME=0
+
 
 raspian-config
 --------------
