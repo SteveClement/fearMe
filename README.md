@@ -124,7 +124,7 @@ mkdir -p ~/Desktop/code/fearMe/Downloads
 cd ~/Desktop/code/fearMe/Downloads
 mkdir mbrola_tmp
 cd mbrola_tmp/
-http://tcts.fpms.ac.be/synthesis/mbrola/bin/raspberri_pi/mbrola.tgz
+wget -c http://tcts.fpms.ac.be/synthesis/mbrola/bin/raspberri_pi/mbrola.tgz
 wget -c http://tcts.fpms.ac.be/synthesis/mbrola/dba/us1/us1-980512.zip
 wget -c http://tcts.fpms.ac.be/synthesis/mbrola/dba/us2/us2-980812.zip
 wget -c http://tcts.fpms.ac.be/synthesis/mbrola/dba/us3/us3-990208.zip
