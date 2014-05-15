@@ -23,6 +23,7 @@ safetyMessage="Your device is very safe now."
 welcomeMessage="Starting up"
 goodHandsMessage="Your data is\nin good hands."
 inciteMessage="Please connect your device"
+backingUp = ""
 
 runOnce = True
 
@@ -46,7 +47,8 @@ def sayStuff(msg):
 	fh.close()
 
 	print("Saying: " + msg)
-	check_output([festival, festival_opts, festival_file])
+    if feature['audio'] == True:
+    	check_output([festival, festival_opts, festival_file])
 
 def main():
 	global lastOutput
@@ -67,7 +69,7 @@ def main():
 	fhCH = open('txt/connectionHistory.txt','a')
 
 	output=check_output(grabDev, shell=True)
-	if ((lastOutput - startTime) > 30) or ((int(time() - lastTimeout) > 180)):
+	if ((lastOutput - startTime) > 210) or ((int(time() - lastTimeout) > 380)):
 		print("#timeout")
 		timeout()
 		lastTimeout=int(time())
@@ -93,7 +95,11 @@ def main():
 		attachedDevice = attachedDevices[0][2:].split(":")[1].replace("iPhone", "eye Phone")
 		attachedDevice = attachedDevices[0][2:].split(":")[1].replace("iPad", "eye Pad")
 		print(attachedDevice)
-		lcd.backlight(lcd.RED)
+        for _ in range(0,5):
+    		lcd.backlight(lcd.RED)
+            sleep(.3)
+            lcd.backlight(lcd.WHITE)
+            lcd.backlight(lcd.RED)
 		msg = "Hello:\n " + attachedDevice
 		lcd.clear()
 		lcd.message(msg)
@@ -206,7 +212,7 @@ def setup():
 
 def timeout():
 	lcd.clear()
-	lcd.message("Timeout reached")
+	lcd.message("Please connect\nor self-destructing")
 	for _ in range(0,2):
 		lcd.backlight(lcd.RED)
 		sleep(.5)
