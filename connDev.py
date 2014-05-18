@@ -18,37 +18,49 @@ lcd.begin(16,2)
 lcd.backlight(lcd.GREEN)
 lcd.blink()
 
-cmd = "ip addr show eth0 | grep inet | awk '{print $2}' | cut -d/ -f1"
+IPcmd = "ip addr show eth0 | grep inet | awk '{print $2}' | cut -d/ -f1"
+
 safetyMessage="Your device is very safe now."
 welcomeMessage="Starting up"
 goodHandsMessage="Your data is\nin good hands."
 inciteMessage="Please connect your device"
 backingUp = ""
 
+home = expanduser("~")
+code = "/Desktop/code/fearMe"
+
+# This will set the debug mode, either globally on or via the attached LCD
+debug = {'glob': False, 'lcd': False }
+
+# This is the feature set used by fearMe, see README.md for details
+feature = {'lcd': True, 'audio': True, 'arduino': True, 'creep': True}
 runOnce = True
 
-debug = {'glob': False, 'lcd': False }
-feature = {'lcd': True, 'audio': True, 'arduino': True, 'creep': True}
-
-lcd_debug = False
+# Initialiaze the timeout counters with the current unix time-stamp
 startTime=lastOutput=lastTimeout=int(time())
 
+# Simple function to run a command and return the output
 def run_cmd(cmd):
         p = Popen(cmd, shell=True, stdout=PIPE)
         output = p.communicate()[0]
         return output
 
-def sayStuff(msg):
+# Main function to interact with the outside world
+
+def sayStuff(msg, accent=0, audioOnly=False):
 	festival = "/usr/bin/festival"
 	festival_opts = "--tts"
-	festival_file = "/tmp/say.txt"
-	fh = open(festival_file, "w")
-	print(msg, file=fh)
-	fh.close()
 
 	print("Saying: " + msg)
-    if feature['audio'] == True:
-    	check_output([festival, festival_opts, festival_file])
+	if feature['audio'] == True:
+		festival_file = "/tmp/say.txt"
+		msg = msg.replace("\n","")
+		fh = open(festival_file, "w")
+		print(msg, file=fh)
+		fh.close()
+		check_output([festival, festival_opts, festival_file])
+	if feature['lcd'] == True:
+		lcd.message(msg)
 
 def main():
 	global lastOutput
@@ -58,12 +70,11 @@ def main():
 	iDevDupeCount = 0
 
 	ipaddr = setup()
+
 	if debug['lcd']:
 		lcd.message('IP %s' % ( str(ipaddr) ) )
 	lcd.clear()
-	lcd.message('Please connect\nyour device...')
-	home = expanduser("~")
-	code = "/Desktop/code/fearMe"
+	lcd.message('Please connect\nyour phone...')
 	grabDev = home + code + "/Scripts/grabDev.sh"
 
 	fhCH = open('txt/connectionHistory.txt','a')
@@ -193,7 +204,7 @@ def readDev(iDev, iDevDupe=False):
 
 def setup():
 	global runOnce
-	ipaddr = run_cmd(cmd)
+	ipaddr = run_cmd(IPcmd)
 	if runOnce:
 		#sayStuff("Welcome to the Universal charging station.")
 		lcd.message(welcomeMessage)
@@ -212,7 +223,7 @@ def setup():
 
 def timeout():
 	lcd.clear()
-	lcd.message("Please connect\nor self-destructing")
+	sayStuff("Please connect\nor self-destructing")
 	for _ in range(0,2):
 		lcd.backlight(lcd.RED)
 		sleep(.5)
@@ -222,15 +233,27 @@ def timeout():
 		sleep(.5)
 
 def checkVersion(iOSVer):
-	#v7 = "7.0.6"
-	v7 = "7.0.4"
+	v7 = "7.0.6"
 	v71 = "7.1.1"
 	v6 = "6.0.2"
 	v61 = "6.1.6"
 	v5 = "obsolete"
 
+	def up2date(iOSVer):
+		sayStuf("You seem to be up to date with version " + iOSVer + ", but do not worry, we have a backup",True)
+		if debug['glob'] == True:
+			print("You are runing: " + iOSVer)
+
 	if iOSVer == v7:
-		print("You are runing: " + v7)
+		up2date(v7)
+	if iOSVer == v71:
+		up2date(v71)
+	if iOSVer == v6:
+		up2date(v6)
+	if iOSVer == v61:
+		up2date(v61)
+	if iOSVer == v5:
+		up2date(v5)
 
 if __name__ == "__main__":
 	while True:
@@ -239,4 +262,5 @@ if __name__ == "__main__":
 		sleep(.5)
 		lcd.clear()
 		lcd.backlight(lcd.GREEN)
-		#lcd.message(datetime.now().strftime('%b %d\n  %H:%M:%S\n'))
+		if debug['lcd']:
+			lcd.message(datetime.now().strftime('%b %d\n  %H:%M:%S\n'))
