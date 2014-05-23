@@ -1,0 +1,29 @@
+[    0.102642] usbcore: registered new interface driver usbfs
+[    0.102647] usbcore: registered new interface driver hub
+[    0.102663] usbcore: registered new device driver usb
+[    0.528805] usb usb1: New USB device found, idVendor=1d6b, idProduct=0002
+[    0.528807] usb usb1: New USB device strings: Mfr=3, Product=2, SerialNumber=1
+[    0.528808] usb usb1: Product: EHCI Host Controller
+[    0.528809] usb usb1: Manufacturer: Linux 3.13.0-24-generic ehci_hcd
+[    0.528810] usb usb1: SerialNumber: 0000:00:0b.0
+[    0.709934] usb usb2: New USB device found, idVendor=1d6b, idProduct=0001
+[    0.709937] usb usb2: New USB device strings: Mfr=3, Product=2, SerialNumber=1
+[    0.709940] usb usb2: Product: OHCI PCI host controller
+[    0.709941] usb usb2: Manufacturer: Linux 3.13.0-24-generic ohci_hcd
+[    0.709943] usb usb2: SerialNumber: 0000:00:06.0
+[    1.652164] usb 2-1: new full-speed USB device number 2 using ohci-pci
+[    1.896054] usb 2-1: New USB device found, idVendor=80ee, idProduct=0021
+[    1.896057] usb 2-1: New USB device strings: Mfr=1, Product=3, SerialNumber=0
+[    1.896058] usb 2-1: Product: USB Tablet
+[    1.896059] usb 2-1: Manufacturer: VirtualBox
+[    3.797063] usbcore: registered new interface driver usbhid
+[    3.797066] usbhid: USB HID core driver
+[    4.530584] input: VirtualBox USB Tablet as /devices/pci0000:00/0000:00:06.0/usb2/2-1/2-1:1.0/input/input7
+[    4.548748] hid-generic 0003:80EE:0021.0001: input,hidraw0: USB HID v1.10 Mouse [VirtualBox USB Tablet] on usb-0000:00:06.0-1/input0
+[   88.828200] usb 1-1: new high-speed USB device number 2 using ehci-pci
+[   89.127406] usb 1-1: New USB device found, idVendor=05ac, idProduct=12a8
+[   89.127410] usb 1-1: New USB device strings: Mfr=1, Product=2, SerialNumber=3
+[   89.127411] usb 1-1: Product: iPhone
+[   89.127412] usb 1-1: Manufacturer: Apple Inc.
+[   89.127414] usb 1-1: SerialNumber: fc188463c202611956f216a4b595bdf24649935c
+[   89.366251] usbcore: registered new interface driver ipheth
