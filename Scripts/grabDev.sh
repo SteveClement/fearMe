@@ -6,6 +6,7 @@ usb_product=`dmesg --facility=kern |grep -P "usb usb[1-99]:|usb [1-9]-[1-9]:" |g
 
 # Really make sure if something happens on the usb bus  we actually catch it
 current_connections=`lsusb |wc -l`
+# Careful if txt/pre_usb.txt is NULL the if fails
 previous_connections=`cat txt/pre_usb.txt`
 
 #if [ "${current_connections}" -lt "${previous_connections}" ]; then
