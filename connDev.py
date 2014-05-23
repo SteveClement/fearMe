@@ -47,8 +47,8 @@ def sayStuff(msg):
 	fh.close()
 
 	print("Saying: " + msg)
-    if feature['audio'] == True:
-    	check_output([festival, festival_opts, festival_file])
+	if feature['audio'] == True:
+    		check_output([festival, festival_opts, festival_file])
 
 def main():
 	global lastOutput
@@ -95,11 +95,11 @@ def main():
 		attachedDevice = attachedDevices[0][2:].split(":")[1].replace("iPhone", "eye Phone")
 		attachedDevice = attachedDevices[0][2:].split(":")[1].replace("iPad", "eye Pad")
 		print(attachedDevice)
-        for _ in range(0,5):
-    		lcd.backlight(lcd.RED)
-            sleep(.3)
-            lcd.backlight(lcd.WHITE)
-            lcd.backlight(lcd.RED)
+		for _ in range(0,5):
+			lcd.backlight(lcd.RED)
+			sleep(.3)
+			lcd.backlight(lcd.WHITE)
+			lcd.backlight(lcd.RED)
 		msg = "Hello:\n " + attachedDevice
 		lcd.clear()
 		lcd.message(msg)
