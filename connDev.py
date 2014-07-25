@@ -48,19 +48,19 @@ def run_cmd(cmd):
 # Main function to interact with the outside world
 
 def sayStuff(msg, accent=0, audioOnly=False):
-	festival = "/usr/bin/festival"
-	festival_opts = "--tts"
+        festival = "/usr/bin/festival"
+        festival_opts = "--tts"
 
-	print("Saying: " + msg)
-	if feature['audio'] == True:
-		festival_file = "/tmp/say.txt"
-		msg = msg.replace("\n","")
-		fh = open(festival_file, "w")
-		print(msg, file=fh)
-		fh.close()
-		check_output([festival, festival_opts, festival_file])
-	if feature['lcd'] == True:
-		lcd.message(msg)
+        print("Saying: " + msg)
+        if feature['audio'] == True:
+                festival_file = "/tmp/say.txt"
+                msg = msg.replace("\n","")
+                fh = open(festival_file, "w")
+                print(msg, file=fh)
+                fh.close()
+                check_output([festival, festival_opts, festival_file])
+        if feature['lcd'] == True:
+                lcd.message(msg)
 
 def main():
 	global lastOutput
@@ -106,11 +106,11 @@ def main():
 		attachedDevice = attachedDevices[0][2:].split(":")[1].replace("iPhone", "eye Phone")
 		attachedDevice = attachedDevices[0][2:].split(":")[1].replace("iPad", "eye Pad")
 		print(attachedDevice)
-        for _ in range(0,5):
-    		lcd.backlight(lcd.RED)
-            sleep(.3)
-            lcd.backlight(lcd.WHITE)
-            lcd.backlight(lcd.RED)
+		for _ in range(0,5):
+			lcd.backlight(lcd.RED)
+			sleep(.3)
+			lcd.backlight(lcd.WHITE)
+			lcd.backlight(lcd.RED)
 		msg = "Hello:\n " + attachedDevice
 		lcd.clear()
 		lcd.message(msg)
