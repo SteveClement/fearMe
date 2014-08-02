@@ -182,7 +182,7 @@ CMU Arctic
 ----------
 These voices were developed by the Language Technologies Institute at Carnegie Mellon University. They sound much better than both the diphone and the MBROLA voices. See the information page and voice demo page (the *_arctic_cg are the voices of interest). The drawback is that each voice takes over a hundred megs on disk, and with six English voices to choose from, that can take up a lot of bandwidth to download and depending on how much disk space you have to work with, six-hundred plus megs of space might be a bit much for voice data. However, the HTS voices discussed in the next section may in fact provide equal or better quality synthesis, and are only less than %2 of the size.
 
-<code>
+```
 mkdir cmu_tmp
 cd cmu_tmp/
 wget -c http://www.speech.cs.cmu.edu/cmu_arctic/packed/cmu_us_awb_arctic-0.90-release.tar.bz2
@@ -202,14 +202,14 @@ if [[ "$d" =~ "cmu_us_" ]] ; then
 fi ; done
 cd ../
 rm -rf cmu_tmp/
-</code>
+```
 
 Nitech HTS
 ----------
 These voices are produced by the HTS working group hosted at the Nagoya Institute of Technology. They have produced excellent quality voices which take up very little disk space. In terms of quality and size, probably the best (non-commercial) English voices availible for Festival. See the voice demo page (the *_arctic_hts are the voices of interest). Highly recommended. The voices are available on their download page.
 
 
-<code>
+```
 mkdir hts_tmp
 cd hts_tmp/
 wget -c http://hts.sp.nitech.ac.jp/archives/2.1/festvox_nitech_us_awb_arctic_hts-2.1.tar.bz2
@@ -226,11 +226,12 @@ sudo mv lib/voices/us/* /usr/share/festival/voices/us/
 sudo mv lib/hts.scm /usr/share/festival/hts.scm
 cd ../
 rm -rf hts_tmp/
-</code>
+```
 
 Testing
 -------
 
+```
 for d in `ls /usr/share/festival/voices` ; do ls "/usr/share/festival/voices/${d}" ; done
 
 $ festival
@@ -239,7 +240,7 @@ festival> (voice_us2_mbrola)
 festival> (SayText "Hello from Ubuntu")
 festival> (tts "story.txt" nil)
 festival> (intro)
-
+```
 
 crontab
 -------
