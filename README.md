@@ -10,37 +10,47 @@ REPO_DIR=/home/Desktop/code/fearMe
 
 Dependencies to be installed on Raspbian:
 
+```
  sudo apt-get install python-serial python3-serial python3-dev python3-rpi.gpio i2c-tools festival espeak xsel festlex-cmu arduino gcc-avr avr-libc avrdude libimobiledevice-utils vim tmux htop festvox-don festvox-rablpc16k festvox-kallpc16k festvox-kdlpc16k
+```
 
 Disable screen sleep
 --------------------
 
 If X is running:
 
+```
 sudo vi /etc/lightdm/lightdm.conf
 xserver-command=X -s 0 dpms
+```
 
 If only on console:
 
+```
 sudo vi /etc/kbd/config
 BLANK_TIME=0
 POWERDOWN_TIME=0
-
+```
 
 raspian-config
 --------------
 
 Add:
 
+```
 LC_ALL=en_GB.UTF-8
 LANGUAGE=en_GB.UTF-8
+```
 
 To:
+```
 /etc/default/locale
+```
 
 python3-smbus
 -------------
 
+```
 mkdir -p ~/Desktop/code/fearMe/Downloads
 cd ~/Desktop/code/fearMe/Downloads
 wget -c http://ftp.de.debian.org/debian/pool/main/i/i2c-tools/i2c-tools_3.1.0.orig.tar.bz2
@@ -54,24 +64,29 @@ cp lm_sensors-2.10.8/kernel/include/i2c-dev.h .
 rm -r lm_sensors-2.10.8*
 python3 setup.py build
 sudo python3 setup.py install
-
+```
 
 Arduino
 -------
 
 Fetch the NeoPixel library:
 
+```
 mkdir -p ~/sketchbook/libraries
 cd ~/sketchbook/libraries
 git clone git@github.com:SteveClement/Adafruit_NeoPixel.git
+```
 
 Get the Arduino-Makfile project:
 
+```
 cd ~/Desktop/code
 git clone https://github.com/sudar/Arduino-Makefile.git
+```
 
 Upgrade to Arduino 1.0.5 to use the Arduino micro board:
 
+```
 mkdir ~/Desktop/code/fearMe/Arduino/Downloads
 cd ~/Desktop/code/fearMe/Arduino/Downloads
 wget -c http://arduino.googlecode.com/files/arduino-1.0.5-linux32.tgz
@@ -87,29 +102,39 @@ sudo cp -ru reference /usr/share/doc/arduino-core
 cd ..
 rm -rf arduino-1.0.5
 tar zxvf arduino-1.0.5-linux32.tgz
+```
 
 put this to your .bashrc
 
+```
 export ARDUINO_DIR=/home/pi/Desktop/code/fearMe/Arduino/Downloads/arduino-1.0.5
 export ARDMK_DIR=/home/pi/Desktop/code/Arduino-Makefile
 export AVR_TOOLS_DIR=/usr
 export EDITOR=vim
+```
 
 LCD Display
 -----------
 
 Add:
 
+```
 i2c-bcm2708
 i2c-dev
+```
 
 To:
+
+```
 /etc/modules
+```
 
 Add your user to the group: i2c
 
+```
 sudo vigr
 sudo vigr -s
+```
 
 High quality voices
 -------------------
@@ -119,7 +144,7 @@ mbrola
 
 These voices are provided by the MBROLA project, run by the TCTS Lab of the Faculté Polytechnique de Mons in Belgium. They offer several voices, in a variety of languages, which sound much better than the Festvox diphone voices. The database of voices can be viewed at the project's download page. See the voice demo page (the us1, us2 and us3 are the voices of interest). To use the MBROLA voices we need three parts: (1.) the mbrola binary program that parses a tokenstream the festival program feeds it and returns audio data back to festival, (2.) the MBROLA voices, and (3.) the Festvox wrappers to let the festival program use the voices. This may sound scary, but it's really very easy to do.
 
-<code>
+```
 mkdir -p ~/Desktop/code/fearMe/Downloads
 cd ~/Desktop/code/fearMe/Downloads
 mkdir mbrola_tmp
@@ -151,7 +176,7 @@ sudo mv festival/lib/voices/english/us2_mbrola/* /usr/share/festival/voices/engl
 sudo mv festival/lib/voices/english/us3_mbrola/* /usr/share/festival/voices/english/us3_mbrola/
 cd ../
 rm -rf mbrola_tmp/
-</code>
+```
 
 CMU Arctic
 ----------
@@ -215,16 +240,17 @@ festival> (SayText "Hello from Ubuntu")
 festival> (tts "story.txt" nil)
 festival> (intro)
 
+
 crontab
 -------
 
-
 Add:
+
+```
 @reboot ~/Desktop/code/fearMe/Scripts/fearMe_tmux.sh
 5/* * * * * ~/Desktop/code/fearMe/Scripts/cleanUp.sh
+```
 
 to your $LUSER crontab
 
-
 Finally, you can ask the plate which buttons are pressed with buttonPressed(lcd.BUTTONNAME) where BUTTONNAME is LEFT RIGHT UP DOWN or SELECT. This is not an interrupt-driven library so you can't have an interrupt go off when a button in pressed, instead you'll have to query the button in a loop. 
-
