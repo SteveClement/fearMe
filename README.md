@@ -84,7 +84,10 @@ cd ~/Desktop/code
 git clone https://github.com/sudar/Arduino-Makefile.git
 ```
 
-Upgrade to Arduino 1.0.6 to use the Arduino micro board:
+Arduino upgrade
+---------------
+
+Upgrade to Arduino 1.0.6 (from 1.0.1) to use the Arduino micro board:
 
 ```
 mkdir ~/Desktop/code/fearMe/Arduino/Downloads
