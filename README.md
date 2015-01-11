@@ -84,14 +84,14 @@ cd ~/Desktop/code
 git clone https://github.com/sudar/Arduino-Makefile.git
 ```
 
-Upgrade to Arduino 1.0.5 to use the Arduino micro board:
+Upgrade to Arduino 1.0.6 to use the Arduino micro board:
 
 ```
 mkdir ~/Desktop/code/fearMe/Arduino/Downloads
 cd ~/Desktop/code/fearMe/Arduino/Downloads
-wget -c http://arduino.googlecode.com/files/arduino-1.0.5-linux32.tgz
-tar zxvf arduino-1.0.5-linux32.tgz
-cd arduino-1.0.5
+wget -c "http://arduino.cc/download.php?f=/arduino-1.0.6-linux32.tgz" -O arduino-1.0.6-linux32.tgz
+tar zxvf arduino-1.0.6-linux32.tgz
+cd arduino-1.0.6
 rm -rf hardware/tools
 sudo cp -ru lib /usr/share/arduino
 sudo cp -ru libraries /usr/share/arduino
@@ -100,14 +100,14 @@ sudo cp -ru hardware /usr/share/arduino
 sudo cp -ru examples /usr/share/doc/arduino-core
 sudo cp -ru reference /usr/share/doc/arduino-core
 cd ..
-rm -rf arduino-1.0.5
-tar zxvf arduino-1.0.5-linux32.tgz
+rm -rf arduino-1.0.6
+tar zxvf arduino-1.0.6-linux32.tgz
 ```
 
 put this to your .bashrc
 
 ```
-export ARDUINO_DIR=/home/pi/Desktop/code/fearMe/Arduino/Downloads/arduino-1.0.5
+export ARDUINO_DIR=/home/pi/Desktop/code/fearMe/Arduino/Downloads/arduino-1.0.6
 export ARDMK_DIR=/home/pi/Desktop/code/Arduino-Makefile
 export AVR_TOOLS_DIR=/usr
 export EDITOR=vim
