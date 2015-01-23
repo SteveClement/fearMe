@@ -6,6 +6,7 @@ The F.E.A.R_me Project
 This howto assumes:
 
 HOME=/home/pi
+
 REPO_DIR=/home/Desktop/code/fearMe
 
 Dependencies to be installed on Raspbian:
@@ -69,19 +70,17 @@ sudo python3 setup.py install
 Arduino
 -------
 
-Fetch the NeoPixel library:
+Fetch the submodules:
+
+```
+git submodule update --init
+```
+
+Copy the NeoPixel library:
 
 ```
 mkdir -p ~/sketchbook/libraries
-cd ~/sketchbook/libraries
-git clone git@github.com:SteveClement/Adafruit_NeoPixel.git
-```
-
-Get the Arduino-Makfile project:
-
-```
-cd ~/Desktop/code
-git clone https://github.com/sudar/Arduino-Makefile.git
+cp -r Adafruit_NeoPixel ~/sketchbook/libraries
 ```
 
 Arduino upgrade
@@ -111,7 +110,7 @@ put this to your .bashrc
 
 ```
 export ARDUINO_DIR=/home/pi/Desktop/code/fearMe/Arduino/Downloads/arduino-1.0.6
-export ARDMK_DIR=/home/pi/Desktop/code/Arduino-Makefile
+export ARDMK_DIR=/home/pi/Desktop/code/fearMe/Arduino-Makefile
 export AVR_TOOLS_DIR=/usr
 export EDITOR=vim
 ```
