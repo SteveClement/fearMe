@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/usr/bin/env bash
 
 SESSIONNAME="fearMe"
 tmux has-session -t $SESSIONNAME &> /dev/null
