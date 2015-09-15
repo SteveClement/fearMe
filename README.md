@@ -55,14 +55,14 @@ python3-smbus
 mkdir -p ~/Desktop/code/fearMe/Downloads
 cd ~/Desktop/code/fearMe/Downloads
 wget -c http://ftp.de.debian.org/debian/pool/main/i/i2c-tools/i2c-tools_3.1.0.orig.tar.bz2
-tar xf i2c-tools_3.1.0.orig.tar.bz2
-cd i2c-tools-3.1.0/py-smbus
+tar xf i2c-tools_3.1.1.orig.tar.bz2
+cd i2c-tools-3.1.1/py-smbus
 cp smbusmodule.c smbusmodule.c.orig
 cat ~/Desktop/code/fearMe/Patches/smbusmodule.c.diff | patch
-wget -c http://dl.lm-sensors.org/lm-sensors/releases/lm_sensors-2.10.8.tar.gz
-tar xfz lm_sensors-2.10.8.tar.gz
-cp lm_sensors-2.10.8/kernel/include/i2c-dev.h .
-rm -r lm_sensors-2.10.8*
+wget -c http://github.com/groeck/lm-sensors/archive/V2-10-8.zip
+unzip V2-10-8.zip
+cp lm-sensors-2-10-8/kernel/include/i2c-dev.h .
+rm -r lm-sensors-2-10-8*
 python3 setup.py build
 sudo python3 setup.py install
 ```
@@ -86,14 +86,14 @@ cp -r Adafruit_NeoPixel ~/sketchbook/libraries
 Arduino upgrade
 ---------------
 
-Upgrade to Arduino 1.0.6 (from 1.0.1) to use the Arduino micro board:
+Upgrade to Arduino 1.6.2 (from 1.0.1) to use the Arduino micro board:
 
 ```
 mkdir ~/Desktop/code/fearMe/Arduino/Downloads
 cd ~/Desktop/code/fearMe/Arduino/Downloads
-wget -c "http://arduino.cc/download.php?f=/arduino-1.0.6-linux32.tgz" -O arduino-1.0.6-linux32.tgz
-tar zxvf arduino-1.0.6-linux32.tgz
-cd arduino-1.0.6
+wget -c "http://arduino.cc/download.php?f=/arduino-1.6.2-linux32.tar.xz" -O arduino-1.6.2-linux32.xz
+tar Jxvf arduino-1.6.2-linux32.xz
+cd arduino-1.6.2
 rm -rf hardware/tools
 sudo cp -ru lib /usr/share/arduino
 sudo cp -ru libraries /usr/share/arduino
@@ -102,14 +102,14 @@ sudo cp -ru hardware /usr/share/arduino
 sudo cp -ru examples /usr/share/doc/arduino-core
 sudo cp -ru reference /usr/share/doc/arduino-core
 cd ..
-rm -rf arduino-1.0.6
-tar zxvf arduino-1.0.6-linux32.tgz
+rm -rf arduino-1.6.2
+tar Jxvf arduino-1.6.2-linux32.xz
 ```
 
 put this to your .bashrc
 
 ```
-export ARDUINO_DIR=/home/pi/Desktop/code/fearMe/Arduino/Downloads/arduino-1.0.6
+export ARDUINO_DIR=/home/pi/Desktop/code/fearMe/Arduino/Downloads/arduino-1.6.2
 export ARDMK_DIR=/home/pi/Desktop/code/fearMe/Arduino-Makefile
 export AVR_TOOLS_DIR=/usr
 export EDITOR=vim
@@ -155,16 +155,15 @@ wget -c http://tcts.fpms.ac.be/synthesis/mbrola/bin/raspberri_pi/mbrola.tgz
 wget -c http://tcts.fpms.ac.be/synthesis/mbrola/dba/us1/us1-980512.zip
 wget -c http://tcts.fpms.ac.be/synthesis/mbrola/dba/us2/us2-980812.zip
 wget -c http://tcts.fpms.ac.be/synthesis/mbrola/dba/us3/us3-990208.zip
-wget -c http://www.festvox.org/packed/festival/latest/festvox_us1.tar.gz
-wget -c http://leb.net/pub/blinux/festival/mirror.festival_home/1.4.2/festvox_us1.tar.gz
-wget -c http://leb.net/pub/blinux/festival/mirror.festival_home/1.4.2/festvox_us2.tar.gz
-wget -c http://leb.net/pub/blinux/festival/mirror.festival_home/1.4.2/festvox_us3.tar.gz
+wget -c http://www.festvox.org/packed/festival/1.4.3/festvox_us1.tar.gz
+wget -c http://www.festvox.org/packed/festival/1.4.3/festvox_us2.tar.gz
+wget -c http://www.festvox.org/packed/festival/1.4.3/festvox_us3.tar.gz
 unzip -x us1-980512.zip
 unzip -x us2-980812.zip
 unzip -x us3-990208.zip
-tar xvf festvox_us1.tar.gz
-tar xvf festvox_us2.tar.gz
-tar xvf festvox_us3.tar.gz
+tar zxvf festvox_us1.tar.gz
+tar zxvf festvox_us2.tar.gz
+tar zxvf festvox_us3.tar.gz
 tar xfvz mbrola.tgz
 sudo cp mbrola /usr/local/bin/
 sudo mkdir -p /usr/share/festival/voices/english/us1_mbrola/
@@ -194,7 +193,7 @@ wget -c http://www.speech.cs.cmu.edu/cmu_arctic/packed/cmu_us_jmk_arctic-0.95-re
 wget -c http://www.speech.cs.cmu.edu/cmu_arctic/packed/cmu_us_ksp_arctic-0.95-release.tar.bz2
 wget -c http://www.speech.cs.cmu.edu/cmu_arctic/packed/cmu_us_rms_arctic-0.95-release.tar.bz2
 wget -c http://www.speech.cs.cmu.edu/cmu_arctic/packed/cmu_us_slt_arctic-0.95-release.tar.bz2
-for t in `ls cmu_*` ; do tar xf $t ; done
+for t in `ls cmu_*` ; do tar xfj $t ; done
 rm *.bz2
 sudo mkdir -p /usr/share/festival/voices/english/
 sudo mv * /usr/share/festival/voices/english/
@@ -215,6 +214,7 @@ These voices are produced by the HTS working group hosted at the Nagoya Institut
 mkdir hts_tmp
 cd hts_tmp/
 wget -c http://hts.sp.nitech.ac.jp/archives/2.1/festvox_nitech_us_awb_arctic_hts-2.1.tar.bz2
+http://hts.sp.nitech.ac.jp/archives/2.2/
 wget -c http://hts.sp.nitech.ac.jp/archives/2.1/festvox_nitech_us_bdl_arctic_hts-2.1.tar.bz2
 wget -c http://hts.sp.nitech.ac.jp/archives/2.1/festvox_nitech_us_clb_arctic_hts-2.1.tar.bz2
 wget -c http://hts.sp.nitech.ac.jp/archives/2.1/festvox_nitech_us_rms_arctic_hts-2.1.tar.bz2
