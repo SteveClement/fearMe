@@ -59,7 +59,7 @@ wget -c http://ftp.de.debian.org/debian/pool/main/i/i2c-tools/i2c-tools_3.1.1.or
 tar xf i2c-tools_3.1.1.orig.tar.bz2
 cd i2c-tools-3.1.1/py-smbus
 cp smbusmodule.c smbusmodule.c.orig
-# /!\ :warning: 1 Hunk fails in the following
+# /!\ :warning: 1 Hunk #8 fails in the following
 cat ~/Desktop/code/fearMe/Patches/smbusmodule.c.diff | patch
 wget -c http://github.com/groeck/lm-sensors/archive/V2-10-8.zip
 unzip V2-10-8.zip
@@ -88,14 +88,14 @@ cp -r Adafruit_NeoPixel ~/sketchbook/libraries
 Arduino upgrade
 ---------------
 
-Upgrade to Arduino 1.6.9 (from 1.0.5) to use the Arduino micro board:
+Upgrade to Arduino 1.6.12 (from 1.0.5) to use the Arduino micro board:
 
 ```
 mkdir ~/Desktop/code/fearMe/Arduino/Downloads
 cd ~/Desktop/code/fearMe/Arduino/Downloads
-wget -c "http://arduino.cc/download.php?f=/arduino-1.6.9-linux32.tar.xz" -O arduino-1.6.9-linux32.xz
-tar Jxvf arduino-1.6.9-linux32.xz
-cd arduino-1.6.9
+wget -c "http://arduino.cc/download.php?f=/arduino-1.6.12-linux32.tar.xz" -O arduino-1.6.12-linux32.xz
+tar Jxvf arduino-1.6.12-linux32.xz
+cd arduino-1.6.12
 rm -rf hardware/tools
 sudo cp -ru lib /usr/share/arduino
 sudo cp -ru libraries /usr/share/arduino
@@ -104,14 +104,14 @@ sudo cp -ru hardware /usr/share/arduino
 sudo cp -ru examples /usr/share/doc/arduino-core
 sudo cp -ru reference /usr/share/doc/arduino-core
 cd ..
-rm -rf arduino-1.6.9
-tar Jxvf arduino-1.6.9-linux32.xz
+rm -rf arduino-1.6.12
+tar Jxvf arduino-1.6.12-linux32.xz
 ```
 
-put this to your .bashrc
+put this to your .bashrc/.zshrc
 
 ```
-export ARDUINO_DIR=/home/pi/Desktop/code/fearMe/Arduino/Downloads/arduino-1.6.9
+export ARDUINO_DIR=/home/pi/Desktop/code/fearMe/Arduino/Downloads/arduino-1.6.12
 export ARDMK_DIR=/home/pi/Desktop/code/fearMe/Arduino-Makefile
 export AVR_TOOLS_DIR=/usr
 export EDITOR=vim
