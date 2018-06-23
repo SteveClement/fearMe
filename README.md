@@ -1,6 +1,8 @@
 fearMe
 ======
 
+Needs to be reviewed.
+
 The F.E.A.R_me Project
 
 This howto assumes:
